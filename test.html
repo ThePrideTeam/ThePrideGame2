@@ -1,0 +1,244 @@
+<html>
+    <head>
+    <script src="jquery-1.11.3.js"></script>
+    <script src="rendergraphics.js"></script>
+<script type="text/javascript">
+   var lines = [];
+    var ci=0;
+    var cj=0;
+    var p=0;
+    $(document).ready(function() {
+       
+    $.ajax({
+        type: "GET",
+        url: "samplelvl_new.txt",
+        dataType: "text",
+        success: function(data) {processData(data);
+                                }
+     });
+        
+        document.onkeydown = makeMove;
+});
+
+   
+    
+    
+function processData(allText) {
+    var allTextLines = allText.split(/\r\n|\n/);
+    for (var i=0; i<allTextLines.length; i++) {
+        var data = allTextLines[i].split(',');
+           var tarr = [];
+            for (var j=0; j<data.length; j++) {
+                tarr.push(data[j]);
+                var temp=data[j].split('/');
+                if(temp[0]=="S")
+                {
+                    ci=i;
+                    cj=j;
+                    p=parseInt(temp[1]);
+                }
+            }
+            lines.push(tarr);
+    }
+    start_game();
+}
+    
+    
+    
+    
+    
+    
+  function dis_check()
+    {
+        document.getElementById('d').innerHTML="";
+        for(var i=0; i<lines.length; i++)
+        {
+            for(var j=0; j<lines[i].length; j++)
+                document.getElementById('d').innerHTML+=lines[i][j]+"&#09";
+            document.getElementById('d').innerHTML+="<br>";
+        }
+        document.getElementById('d').innerHTML+=ci+"<br>"+cj+"<br>"+p+"<br>";
+    }
+    
+
+    
+    
+    function start_game()
+    {
+        //dis_check();
+        rendergraphics_full(lines);
+        document.getElementById('d').innerHTML=p;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    function update_people(i, j)
+    {
+        var t=lines[i][j].split('/');
+        if(parseInt(t[1])>0)
+        {
+            p+=parseInt(t[1]);
+            lines[i][j]="P/0";
+        }
+    }
+    function update_cop(i,j)
+    {
+        var t=lines[i][j].split('/');
+        if(parseFloat(t[1])<1)
+        {
+            p=parseFloat(p);
+            p*=parseFloat(t[1]);
+            p=parseInt(p);
+        }
+        lines[i][j]="C/1";
+    }
+    function update_distraction(i,j)
+    {
+        var t=lines[i][j].split('/');
+        if(parseFloat(t[1])<1)
+        {
+            p=parseFloat(p);
+            p*=parseFloat(t[1]);
+            p=parseInt(p);
+        }
+        lines[i][j]="D/1";
+    }
+    
+    
+    
+    
+    function makeMove(e)
+    {
+        e = e || window.event;
+        var oldi=ci;
+            var oldj=cj;
+        if (e.keyCode == '38') {
+        //alert("up arrow");
+            
+            
+            if(ci-1<0 || (lines[ci-1][cj]!="R" && lines[ci-1][cj]!="T" && lines[ci-1][cj]!="S"))
+            {
+                //alert("SORRY! You cannot go up from here!");
+            }
+            else
+            {
+                ci--;
+                
+                lines[oldi][oldj]="T";
+                lines[ci][cj]="S";
+            }
+        
+    }
+    else if (e.keyCode == '40') {
+        //alert("down arrow");
+        
+        if(ci+1>=lines.length || (lines[ci+1][cj]!="R" && lines[ci+1][cj]!="T" && lines[ci+1][cj]!="S"))
+            {
+                //alert("SORRY! You cannot go down from here!");
+            }
+        else
+            {
+                ci++;
+                
+                lines[oldi][oldj]="T";
+                lines[ci][cj]="S";
+            }
+    }
+    else if (e.keyCode == '37') {
+       //alert("left arrow");
+        
+        if((cj-1)<0 || (lines[ci][cj-1]!="R" && lines[ci][cj-1]!="T" && lines[ci][cj-1]!="S"))
+            {
+                //alert("SORRY! You cannot go left from here!");
+            }
+        else
+            {
+                cj--;
+                
+                lines[oldi][oldj]="T";
+                lines[ci][cj]="S";
+            }
+    }
+    else if (e.keyCode == '39') {
+       //alert("right arrow");
+        
+        if(cj+1>=lines.length || (lines[ci][cj+1]!="R" && lines[ci][cj+1]!="T" && lines[ci][cj+1]!="S"))
+            {
+                //alert("SORRY! You cannot go right from here!");
+            }
+        else
+            {
+                cj++;
+                
+                lines[oldi][oldj]="T";
+                lines[ci][cj]="S";
+            }
+        
+    }
+        
+        
+        
+            if(ci>0)
+        {
+            if(lines[ci-1][cj].charAt(0)=='P')
+                update_people(ci-1,cj);
+            else if(lines[ci-1][cj].charAt(0)=='D')
+                update_distraction(ci-1,cj);
+            else if(lines[ci-1][cj].charAt(0)=='C')
+                update_cop(ci-1,cj);
+        }
+        if(ci<(lines.length-1))
+        {
+            if(lines[ci+1][cj].charAt(0)=='P')
+                update_people(ci+1,cj);
+            else if(lines[ci+1][cj].charAt(0)=='D')
+                update_distraction(ci+1,cj);
+            else if(lines[ci+1][cj].charAt(0)=='C')
+                update_cop(ci+1,cj);
+        }
+        if(cj>0)
+        {
+            if(lines[ci][cj-1].charAt(0)=='P')
+                update_people(ci,cj-1);
+            else if(lines[ci][cj-1].charAt(0)=='D')
+                update_distraction(ci,cj-1);
+            else if(lines[ci][cj-1].charAt(0)=='C')
+                update_cop(ci,cj-1);
+        }
+        if(cj<(lines[0].length-1))
+        {
+            if(lines[ci][cj+1].charAt(0)=='P')
+                update_people(ci,cj+1);
+            else if(lines[ci][cj+1].charAt(0)=='D')
+                update_distraction(ci,cj+1);
+            else if(lines[ci][cj+1].charAt(0)=='C')
+                update_cop(ci,cj+1);
+        }
+        //dis_check();   
+        rendergraphics_partial(lines, ci, cj, oldi, oldj);
+        document.getElementById('d').innerHTML=p;
+    }
+    
+    
+    
+  
+
+    
+    
+  
+    
+    
+</script>
+    </head>
+<body>
+    
+    
+    
+  <p id="d"></p>
+</body>
+</html>
