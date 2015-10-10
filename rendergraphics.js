@@ -29,7 +29,15 @@ function rendergraphics_full(arr)
             }           
             else if(arr[i][j].charAt(0)=='G')
             {
-                img.src = "images/Grass.jpg";
+                if( Math.round( Math.random()* 10) >= 8  ) 
+		{
+			img.src = "images/tree2.jpg";
+		//	alert("Hi!")
+		}
+
+		else {
+			img.src = "images/Grass.jpg";
+		}
             }
             else if(arr[i][j].charAt(0)=='S')
             {
