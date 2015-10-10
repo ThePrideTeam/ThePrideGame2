@@ -75,6 +75,7 @@ function rendergraphics_full(arr)
      tbl.appendChild(tblBody);
         // put <table> in the <body>
     body.appendChild(tbl);
+    tbl.setAttribute("id", "game");
     tbl.setAttribute("border", "0");
 }
 
