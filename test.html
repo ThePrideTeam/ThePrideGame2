@@ -1,5 +1,21 @@
 <html>
     <head>
+        <style>
+        div{
+            background-color: pink;
+            border: 2px solid darkblue;
+            padding: 5px;
+            float:right; 
+            width:45%; 
+            display:box;
+        }
+        table{
+            
+            width:50%;
+        }
+        </style>
+        
+        
     <script src="jquery-1.11.3.js"></script>
     <script src="rendergraphics.js"></script>
 <script type="text/javascript">
@@ -7,6 +23,11 @@
     var ci=0;
     var cj=0;
     var p=0;
+    var win=0;
+    var oldi=0;
+    var oldj=0;
+    var oldesti=0;
+    var oldestj=0;
     $(document).ready(function() {
        
     $.ajax({
@@ -20,7 +41,10 @@
         document.onkeydown = makeMove;
 });
 
-   
+function do_nothing()
+    {
+        return;
+    }   
     
     
 function processData(allText) {
@@ -95,7 +119,7 @@ function processData(allText) {
             p*=parseFloat(t[1]);
             p=parseInt(p);
         }
-        lines[i][j]="C/1";
+        //lines[i][j]="C/1";
     }
     function update_distraction(i,j)
     {
@@ -106,7 +130,17 @@ function processData(allText) {
             p*=parseFloat(t[1]);
             p=parseInt(p);
         }
-        lines[i][j]="D/1";
+        //lines[i][j]="D/1";
+    }
+    
+    
+    
+    
+    
+    function end_game()
+    {
+        document.onkeydown=do_nothing();
+        alert("You have reached your destination. You brought "+p+" people with you");
     }
     
     
@@ -115,13 +149,17 @@ function processData(allText) {
     function makeMove(e)
     {
         e = e || window.event;
-        var oldi=ci;
-            var oldj=cj;
+        
+        oldesti=oldi;
+        oldestj=oldj;
+        oldi=ci;
+        oldj=cj;
+        
         if (e.keyCode == '38') {
         //alert("up arrow");
             
             
-            if(ci-1<0 || (lines[ci-1][cj]!="R" && lines[ci-1][cj]!="T" && lines[ci-1][cj]!="S"))
+            if(ci-1<0 || (lines[ci-1][cj]!="R" && lines[ci-1][cj]!="T" && lines[ci-1][cj]!="S" && lines[ci-1][cj]!="E"))
             {
                 //alert("SORRY! You cannot go up from here!");
             }
@@ -129,15 +167,20 @@ function processData(allText) {
             {
                 ci--;
                 
+                if(lines[ci][cj]=="E")
+                    end_game();
+                else
+                {
                 lines[oldi][oldj]="T";
                 lines[ci][cj]="S";
+                }
             }
         
     }
     else if (e.keyCode == '40') {
         //alert("down arrow");
         
-        if(ci+1>=lines.length || (lines[ci+1][cj]!="R" && lines[ci+1][cj]!="T" && lines[ci+1][cj]!="S"))
+        if(ci+1>=lines.length || (lines[ci+1][cj]!="R" && lines[ci+1][cj]!="T" && lines[ci+1][cj]!="S" && lines[ci+1][cj]!="E"))
             {
                 //alert("SORRY! You cannot go down from here!");
             }
@@ -145,14 +188,19 @@ function processData(allText) {
             {
                 ci++;
                 
+                if(lines[ci][cj]=="E")
+                    end_game();
+                else
+                {
                 lines[oldi][oldj]="T";
                 lines[ci][cj]="S";
+                }
             }
     }
     else if (e.keyCode == '37') {
        //alert("left arrow");
         
-        if((cj-1)<0 || (lines[ci][cj-1]!="R" && lines[ci][cj-1]!="T" && lines[ci][cj-1]!="S"))
+        if((cj-1)<0 || (lines[ci][cj-1]!="R" && lines[ci][cj-1]!="T" && lines[ci][cj-1]!="S" && lines[ci][cj-1]!="E"))
             {
                 //alert("SORRY! You cannot go left from here!");
             }
@@ -160,23 +208,32 @@ function processData(allText) {
             {
                 cj--;
                 
+                if(lines[ci][cj]=="E")
+                    end_game();
+                else
+                {
                 lines[oldi][oldj]="T";
                 lines[ci][cj]="S";
+                }
             }
     }
     else if (e.keyCode == '39') {
        //alert("right arrow");
         
-        if(cj+1>=lines.length || (lines[ci][cj+1]!="R" && lines[ci][cj+1]!="T" && lines[ci][cj+1]!="S"))
+        if(cj+1>=lines.length || (lines[ci][cj+1]!="R" && lines[ci][cj+1]!="T" && lines[ci][cj+1]!="S" && lines[ci][cj+1]!="E"))
             {
                 //alert("SORRY! You cannot go right from here!");
             }
         else
             {
                 cj++;
-                
+                if(lines[ci][cj]=="E")
+                    end_game();
+                else
+                {
                 lines[oldi][oldj]="T";
                 lines[ci][cj]="S";
+                }
             }
         
     }
@@ -220,7 +277,7 @@ function processData(allText) {
                 update_cop(ci,cj+1);
         }
         //dis_check();   
-        rendergraphics_partial(lines, ci, cj, oldi, oldj);
+        rendergraphics_partial(lines, ci, cj, oldi, oldj,oldesti,oldestj);
         document.getElementById('d').innerHTML=p;
     }
     
@@ -237,8 +294,6 @@ function processData(allText) {
     </head>
 <body>
     
-    
-    
-  <p id="d"></p>
+    <div id="d"></div>
 </body>
 </html>
