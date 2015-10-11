@@ -25,7 +25,11 @@ function rendergraphics_full(arr)
 			}
 			else if(arr[i][j].charAt(0)=='P')
             {
+                if(arr[i][j].charAt(1)=='2')
+                img.src = "images/house3.jpg";
+                else
                 img.src = "images/house.jpg";
+                    
             }           
             else if(arr[i][j].charAt(0)=='G')
             {
@@ -45,6 +49,9 @@ function rendergraphics_full(arr)
             }
             else if(arr[i][j].charAt(0)=='D')
             {
+                if(arr[i][j].charAt(1)=='2')
+                    img.src = "images/football.jpg";
+                else
                 img.src = "images/icecream.jpg";
             }
             else if(arr[i][j].charAt(0) == 'T')
