@@ -201,6 +201,12 @@ function processData(allText) {
     function makeMove(e)
     {
             if(timeCount==-1){
+	             var seconds_left = 20;
+var interval = setInterval(function() {
+    document.getElementById('timer').innerHTML = --seconds_left;
+}, 1000);
+	            
+	            
                 timeCount=setTimeout(resetgame,20000);
                 }
         e = e || window.event;
@@ -371,6 +377,10 @@ function processData(allText) {
 <p id="status">
 You are starting with 10 people. Start traversing towards the end.
 </p>
+<span>Time left:&nbsp</span> 
+<span id="timer">
+20
+</span><span>&nbspseconds</span>
 </div>
         
 <div id="section">

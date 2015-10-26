@@ -33,7 +33,7 @@ function rendergraphics_full(arr)
             }           
             else if(arr[i][j].charAt(0)=='G')
             {
-                if( Math.round( Math.random()* 10) >= 10 ) 
+                if( Math.round( Math.random()* 10) >= 9 ) 
 		{
 			img.src = "images/tree2.jpg";
 		//	alert("Hi!")
@@ -92,11 +92,14 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
     var cell = document.getElementById(i+","+j);
     //alert(cell);
     //alert("sir");
-    if (arr[i][j].charAt(0) == 'S')
-    {
+    
+    
+    
+    //if (arr[i][j].charAt(0) == 'S')
+    //{
         //alert("here");
         cell.getElementsByTagName('img')[0].src = "images/user.jpg";
-    }
+    //}
     
     /*var cell = document.getElementById(oldi+","+oldj);
     //alert(cell);
@@ -152,7 +155,7 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
         else
             img.src = "images/roadC.png";
         
-    }*/
+    }
     
     if(arr[i][j].charAt(0)=='S' && arr[i-1][j-1]!="T" && arr[i][j-1]=="T" && arr[i+1][j-1]!="T")
         document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src="images/rainbowH.gif";
@@ -162,34 +165,38 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
         document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowV.gif";
     if(arr[i][j].charAt(0)=='S' && arr[i-1][j+1]!="T" && arr[i-1][j]=="T" && arr[i-1][j-1]!="T")
         document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowV.gif";
-    
+    */
     
     if(i>=0 && j>=0 && i<arr.length && j<arr.length)
         {
-            if(arr[i+1][j]=="T")
+            if((i+1)<arr.length && arr[i+1][j]=="T")
             {
-                if(arr[i+2][j]!="T")
+                if((i+2)<arr.length && arr[i+2][j]!="T")
                 {
-                    if(arr[i+1][j-1]=="T" && arr[i+1][j+1]=="T")
+                    if((j-1)>=0 && (j+1)<arr.length && arr[i+1][j-1]=="T" && arr[i+1][j+1]=="T")
                         document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowTUp.gif";
-                    else if(arr[i+1][j-1]=="T")
+                    
+                    else if((j-1)>=0 && arr[i+1][j-1]=="T")
                     {
                         document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowRLC.png";
                     }
-                    else if(arr[i+1][j+1]=="T")
+                    else if((j+1)<arr.length && arr[i+1][j+1]=="T")
                     {
                         document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowLLC.png";
                     }
                 }
                 else
-                    document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                {
+                    if(document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src!="images/rainbowH.gif" && document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src!="images/rainbowV.gif")
+                        document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                }
             }
             
-            else if(arr[i-1][j]=="T")
+            else if((i-1)>=0 && arr[i-1][j]=="T")
             {
-                if(arr[i-2][j]!="T")
+                if((i-2)>=0 && arr[i-2][j]!="T")
                 {
-                    if(arr[i-1][j-1]=="T" && arr[i-1][j+1]=="T")
+                    if((j-1)>=0 && arr[i-1][j-1]=="T" && (j+1)<arr.length && arr[i-1][j+1]=="T")
                         document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowTDown.gif";
                     else if(arr[i-1][j-1]=="T")
                         document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowRUC.png";
@@ -197,7 +204,10 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
                         document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowLUC.png";
                 }
                 else
-                    document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                {
+                    if(document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src!="images/rainbowH.gif" && document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src!="images/rainbowV.gif")
+                        document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                }
             }
             
             
@@ -214,7 +224,10 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
                         document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src="images/rainbowLUC.png";
                 }
                 else
-                    document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                {
+                    if(document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src!="images/rainbowH.gif" && document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src!="images/rainbowV.gif")
+                        document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                }
             }
             
             
@@ -232,13 +245,24 @@ function rendergraphics_partial(arr, i, j, oldi, oldj,oldesti,oldestj)
                         document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src="images/rainbowRUC.png";
                 }
                 else
-                    document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                {
+                    if(document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src!="images/rainbowH.gif" && document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src!="images/rainbowV.gif")
+                        document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src="images/rainbowInt.gif";
+                }
             }
             
             
         }
 
-
+        if(arr[i][j].charAt(0)=='S' && ((i>0 && arr[i-1][j-1]!="T" && arr[i][j-1]=="T" && arr[i+1][j-1]!="T") || (i==0 && arr[i][j-1]=="T" && arr[i+1][j-1]!="T")))
+        document.getElementById(i+","+(j-1)).getElementsByTagName('img')[0].src="images/rainbowH.gif";
+    if(arr[i][j].charAt(0)=='S' && ((i>0 && arr[i+1][j+1]!="T" && arr[i][j+1]=="T" && arr[i-1][j+1]!="T") || (i==0 && arr[i+1][j+1]!="T" && arr[i][j+1]=="T")))
+        document.getElementById(i+","+(j+1)).getElementsByTagName('img')[0].src="images/rainbowH.gif";
+    if(arr[i][j].charAt(0)=='S' && ((j>0 && arr[i+1][j+1]!="T" && arr[i+1][j]=="T" && arr[i+1][j-1]!="T") || (j==0 && arr[i+1][j+1]!="T" && arr[i+1][j]=="T")))
+        document.getElementById((i+1)+","+j).getElementsByTagName('img')[0].src="images/rainbowV.gif";
+    if(arr[i][j].charAt(0)=='S' && arr[i-1][j+1]!="T" && arr[i-1][j]=="T" && arr[i-1][j-1]!="T")
+        document.getElementById((i-1)+","+j).getElementsByTagName('img')[0].src="images/rainbowV.gif";
+    
     
     
     
